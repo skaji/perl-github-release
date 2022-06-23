@@ -2,6 +2,8 @@ package GitHub::Release;
 use strict;
 use warnings;
 
+our $VERSION = '0.001';
+
 use HTTP::Tinyish 0.18;
 
 sub new {
@@ -35,3 +37,27 @@ sub get_latest_assets {
 }
 
 1;
+__END__
+
+=encoding utf-8
+
+=head1 NAME
+
+GitHub::Release - blah blah blah
+
+=head1 SYNOPSIS
+
+  use GitHub::Release;
+
+=head1 DESCRIPTION
+
+GitHub::Release is
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2022 Shoichi Kaji <skaji@cpan.org>
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
