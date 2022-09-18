@@ -27,7 +27,8 @@ sub get_latest_tag {
 
 sub get_latest_assets {
     my ($self, $url) = @_;
-    $url = "$url/releases/latest";
+    my $latest_tag = $self->get_latest_tag($url);
+    $url = "$url/releases/expanded_assets/$latest_tag";
     my $res = $self->{http}->get($url);
     if (!$res->{success}) {
         die "$res->{status}, $url\n";
