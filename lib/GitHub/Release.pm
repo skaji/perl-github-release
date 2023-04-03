@@ -9,8 +9,8 @@ use HTTP::Tinyish 0.18;
 sub new {
     my $class = shift;
     bless {
-        http => HTTP::Tinyish->new,
-        http_no_redirect => HTTP::Tinyish->new(max_redirect => 0),
+        http => HTTP::Tinyish->new(verify_SSL => 1),
+        http_no_redirect => HTTP::Tinyish->new(verify_SSL => 1, max_redirect => 0),
     }, $class;
 }
 
