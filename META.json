@@ -21,8 +21,8 @@
       },
       "runtime" : {
          "requires" : {
-            "HTTP::Tinyish" : "0.18",
-            "perl" : "5.008001"
+            "HTTP::Tinyish" : "0",
+            "perl" : "v5.16.0"
          }
       }
    },

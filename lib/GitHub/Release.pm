@@ -1,29 +1,24 @@
-package GitHub::Release;
-use strict;
+package GitHub::Release 0.001;
+use v5.16;
 use warnings;
 
-our $VERSION = '0.001';
-
-use HTTP::Tinyish 0.18;
+use HTTP::Tinyish;
 
 sub new {
     my $class = shift;
-    bless {
-        http => HTTP::Tinyish->new(verify_SSL => 1),
-        http_no_redirect => HTTP::Tinyish->new(verify_SSL => 1, max_redirect => 0),
-    }, $class;
+    my $http = HTTP::Tinyish->new(verify_SSL => 1);
+    bless { http => $http }, $class;
 }
 
 sub get_tags {
     my ($self, $url) = @_;
-    my ($owner, $repo) = $url =~ m{https://github.com/([^/]+)/([^/]+)};
-    my $release_page_url = "https://github.com/$owner/$repo/releases";
-    my $res = $self->{http}->get($release_page_url);
+    $url = "$url/releases";
+    my $res = $self->{http}->get($url);
     if (!$res->{success}) {
-        die "$res->{status}, $release_page_url\n";
+        die "$res->{status}, $url\n";
     }
-    my @tag = $res->{content} =~ m{"/$owner/$repo/releases/tag/(.+?)"}g;
-    @tag;
+    my @href = $res->{content} =~ m{ href="(.+?)" }xgi;
+    map { m{/releases/tag/([^/]+)} ? $1 : () } @href;
 }
 
 sub get_assets {
@@ -39,19 +34,14 @@ sub get_assets {
 
 sub get_latest_tag {
     my ($self, $url) = @_;
-    $url = "$url/releases/latest";
-    my $res = $self->{http_no_redirect}->get($url);
-    if ($res->{status} !~ /^3/) {
-        die "$res->{status}, $url\n";
-    }
-    my $loc = $res->{headers}{location};
-    (split /\//, $loc)[-1];
+    my @tag = $self->get_tags($url);
+    $tag[0];
 }
 
 sub get_latest_assets {
     my ($self, $url) = @_;
-    my $latest_tag = $self->get_latest_tag($url);
-    $self->get_assets($url, $latest_tag);
+    my $tag = $self->get_latest_tag($url);
+    $self->get_assets($url, $tag);
 }
 
 1;
