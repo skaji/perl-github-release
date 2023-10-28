@@ -5,6 +5,9 @@ use GitHub::Release;
 
 my $release = GitHub::Release->new;
 
+my @tag = $release->get_tags("https://github.com/skaji/remote-pbcopy-iterm2");
+diag explain \@tag;
+
 my $tag = $release->get_latest_tag("https://github.com/skaji/remote-pbcopy-iterm2");
 diag $tag;
 

@@ -14,6 +14,29 @@ sub new {
     }, $class;
 }
 
+sub get_tags {
+    my ($self, $url) = @_;
+    my ($owner, $repo) = $url =~ m{https://github.com/([^/]+)/([^/]+)};
+    my $release_page_url = "https://github.com/$owner/$repo/releases";
+    my $res = $self->{http}->get($release_page_url);
+    if (!$res->{success}) {
+        die "$res->{status}, $release_page_url\n";
+    }
+    my @tag = $res->{content} =~ m{"/$owner/$repo/releases/tag/(.+?)"}g;
+    @tag;
+}
+
+sub get_assets {
+    my ($self, $url, $tag) = @_;
+    $url = "$url/releases/expanded_assets/$tag";
+    my $res = $self->{http}->get($url);
+    if (!$res->{success}) {
+        die "$res->{status}, $url\n";
+    }
+    my @href = $res->{content} =~ m{ href="(.+?)" }xgi;
+    map { m{^https} ? $_ : "https://github.com$_" } grep { m{/releases/download/} } @href;
+}
+
 sub get_latest_tag {
     my ($self, $url) = @_;
     $url = "$url/releases/latest";
@@ -28,13 +51,7 @@ sub get_latest_tag {
 sub get_latest_assets {
     my ($self, $url) = @_;
     my $latest_tag = $self->get_latest_tag($url);
-    $url = "$url/releases/expanded_assets/$latest_tag";
-    my $res = $self->{http}->get($url);
-    if (!$res->{success}) {
-        die "$res->{status}, $url\n";
-    }
-    my @href = $res->{content} =~ m{ href="(.+?)" }xgi;
-    map { m{^https} ? $_ : "https://github.com$_" } grep { m{/releases/download/} } @href;
+    $self->get_assets($url, $latest_tag);
 }
 
 1;
