@@ -1,5 +1,0 @@
-prereqs:
-  runtime:
-    requires:
-      perl: { version: 'v5.16' }
-      HTTP::Tinyish:

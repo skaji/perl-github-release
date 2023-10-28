@@ -1,53 +1,12 @@
 {
-   "abstract" : "blah blah blah",
-   "author" : [
-      "Shoichi Kaji <skaji@cpan.org>"
-   ],
-   "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 6.030, CPAN::Meta::Converter version 2.150010",
-   "license" : [
-      "perl_5"
-   ],
-   "meta-spec" : {
-      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
-      "version" : 2
-   },
-   "name" : "GitHub-Release",
-   "prereqs" : {
-      "configure" : {
-         "requires" : {
-            "Module::Build::Tiny" : "0.034"
-         }
-      },
-      "runtime" : {
-         "requires" : {
-            "HTTP::Tinyish" : "0",
-            "perl" : "v5.16.0"
-         }
+  "name": "_",
+  "version": "1",
+  "x_static_install": 1,
+  "prereqs": {
+    "runtime": {
+      "requires": {
+        "HTTP::Tinyish": "0"
       }
-   },
-   "provides" : {
-      "GitHub::Release" : {
-         "file" : "lib/GitHub/Release.pm",
-         "version" : "0.001"
-      }
-   },
-   "release_status" : "stable",
-   "resources" : {
-      "bugtracker" : {
-         "web" : "https://github.com/skaji/perl-github-release/issues"
-      },
-      "homepage" : "https://github.com/skaji/perl-github-release",
-      "repository" : {
-         "type" : "git",
-         "url" : "https://github.com/skaji/perl-github-release.git",
-         "web" : "https://github.com/skaji/perl-github-release"
-      }
-   },
-   "version" : "0.001",
-   "x_generated_by_perl" : "v5.38.0",
-   "x_serialization_backend" : "Cpanel::JSON::XS version 4.37",
-   "x_spdx_expression" : "Artistic-1.0-Perl OR GPL-1.0-or-later",
-   "x_static_install" : 1
+    }
+  }
 }
-
