@@ -7,7 +7,8 @@ use HTTP::Tinyish;
 sub new {
     my $class = shift;
     my $http = HTTP::Tinyish->new(verify_SSL => 1);
-    bless { http => $http }, $class;
+    my $no_redirect = HTTP::Tinyish->new(verify_SSL => 1, max_redirect => 0);
+    bless { http => $http, http_no_redirect => $no_redirect }, $class;
 }
 
 sub get_tags {
@@ -34,8 +35,13 @@ sub get_assets {
 
 sub get_latest_tag {
     my ($self, $url) = @_;
-    my @tag = $self->get_tags($url);
-    $tag[0];
+    $url = "$url/releases/latest";
+    my $res = $self->{http_no_redirect}->get($url);
+    if ($res->{status} !~ /^3/) {
+        die "$res->{status}, $url\n";
+    }
+    my $loc = $res->{headers}{location};
+    (split /\//, $loc)[-1];
 }
 
 sub get_latest_assets {
